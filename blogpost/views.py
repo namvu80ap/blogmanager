@@ -1,5 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import View
+from rest_framework import generics, permissions
+from blogpost.models import Article
+from blogpost.dataserializer import ArticleSerializer
+from blogpost.permissions import *
 
 # def index(request):
 # 	params = {}
@@ -13,6 +17,36 @@ class Index(View):
 		params["name"] = "Django"
 		return render(request, 'blogpost/base.html', params)
 
+
+# class ArticleList(generics.ListCreateAPIView):
+#     model = Article
+#     queryset = Article.objects.all()
+#     serializer_class = ArticleSerializer
+#     permission_classes = [
+#         permissions.AllowAny
+#     ]
+
+
+class ArticlePost(object):
+    model = Article
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = [
+        # PostAuthorCanEditPermission
+        permissions.AllowAny
+    ]
+
+    # def perform_create(self, serializer):
+    #     """Force author to the current user on save"""
+    #     serializer.save(author=self.request.user)
+
+
+class ArticleList(ArticlePost, generics.ListCreateAPIView):
+    pass
+
+
+class ArticleDetail(ArticlePost, generics.RetrieveUpdateDestroyAPIView):
+    pass
 # class Index(View):
 # 	def get(self, request):
 # 		return HttpResponse('I am called from a get Request')

@@ -6,15 +6,23 @@
     {% block css %}
     {% endblock %}
   </head>
-  <body>
+  <body ng-app="{% block ng_app %}blogmanager.blogpost{% endblock %}">
 <nav class="navbar navbar-default" role="navigation">
  <a class="navbar-brand" href="#">Blogmanager</a>
     {% block navbar %}
     {% endblock %}
 </nav>
-  <div class="container">
-    {% block content %}
-    {% endblock %}
+<div class="content" ng-controller="{% block ng_controller %}BlogPostController{% endblock %}">{% block content %}
+{% verbatim %}
+    <div class="panel" ng-repeat="post in posts">
+        <div class="panel-heading clearfix">
+            <h3 class="panel-title">ss</h3>
+            <author class="pull-right">ss</author>
+        </div>
+        <p class="well">ss</p>
+    </div>
+{% endverbatim %}
+{% endblock %}
 </div>
 <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
      <p class="navbar-text navbar-right">Footer </p>
@@ -22,7 +30,10 @@
 <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/base.js' %}"></script>
-    {% block js %}
-    {% endblock %}
-  </body>
+<script src="{% static 'js/angular.js' %}"></script>
+<script src="{% static 'js/angular-resource.js' %}"></script>
+<script src="{% static 'js/blogmanager/application.js' %}"></script>
+{% block js %}
+{% endblock %}
+</body>
 </html>
