@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from blogpost.views import Index, ArticleList, ArticleDetail
+from blogpost.views import Index, ArticleList, ArticleDetail, EditArticleView, ListArticleView
 
 
 article_urls = [
@@ -11,5 +11,7 @@ article_urls = [
 
 urlpatterns = [
 	url(r'^$', Index.as_view()),
+	url(r'^edit_article.html$',  EditArticleView.as_view()),
+	url(r'^list_article.html$', ListArticleView.as_view()),
     url(r'^articles', include(article_urls)),
 ]

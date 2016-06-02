@@ -3,7 +3,7 @@ from rest_framework import serializers
 from blogpost.models import Category, Article
 
 class ArticleSerializer(serializers.ModelSerializer):
-    # photos = serializers.HyperlinkedIdentityField('photos', view_name='postphoto-list')
+    # photos = serializesr.HyperlinkedIdentityField('photos', view_name='postphoto-list')
     # author = serializers.HyperlinkedRelatedField(view_name='user-detail', lookup_field='username')
 
     def get_validation_exclusions(self):

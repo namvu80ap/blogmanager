@@ -1,0 +1,23 @@
+<!-- Start Edit Article -->
+{% block content %}
+{% verbatim %}
+<div class="container">
+  <h3>Blog Edit {{currentArticle1.title}}</h3>
+  <!-- Article title -->
+  <div class="form-group">
+    <label for="articleTitle">Title</label>
+    <input type="text" class="form-control" id="articleTitle" placeholder="Article title" value="{{currentArticle1.title}}">
+  </div>
+  <!-- Article content -->
+  <div class="form-group">
+    <label for="articleContent">Content</label>
+    <textarea class="form-control" rows="3" id="articleContent" placeholder="Input content" ></textarea>
+  </div>
+
+  <div class="form-group">
+  <button  class="btn btn-default">Submit</button>
+  </div>
+</div>
+<!-- END Edit Article -->
+{% endverbatim %}
+{% endblock %}

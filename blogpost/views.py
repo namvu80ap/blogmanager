@@ -15,7 +15,21 @@ class Index(View):
 	def get(self, request):
 		params = {}
 		params["name"] = "Django"
-		return render(request, 'blogpost/base.html', params)
+		return render(request, 'blogpost/main.html', params)
+
+
+class EditArticleView(View):
+	def get(self, request):
+		return render(request, 'blogpost/edit_article.html')
+
+class ListArticleView(View):
+	def get(self, request):
+		return render(request, 'blogpost/list_article.html')
+
+	# def edit_article(request):
+ # 		return render(request, 'blopost/edit_article.html')
+ # 	def list_article(request):
+ # 		return render(request, 'blopost/list_article.html')
 
 
 # class ArticleList(generics.ListCreateAPIView):
