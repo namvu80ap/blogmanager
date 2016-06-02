@@ -1,9 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.views.generic import View
 from rest_framework import generics, permissions
 from blogpost.models import Article
 from blogpost.dataserializer import ArticleSerializer
 from blogpost.permissions import *
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
+import logging
+
+logger = logging.getLogger(__name__)
 
 # def index(request):
 # 	params = {}
@@ -16,7 +23,6 @@ class Index(View):
 		params = {}
 		params["name"] = "Django"
 		return render(request, 'blogpost/main.html', params)
-
 
 class EditArticleView(View):
 	def get(self, request):
@@ -44,6 +50,19 @@ class ListArticleView(View):
 class ArticlePost(object):
     model = Article
     queryset = Article.objects.all()
+    
+    paginator = Paginator(queryset, 5)
+    print(paginator)
+    try:
+        queryset = paginator.page(1).object_list
+        print( queryset )
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        queryset = paginator.page(1).object_list
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        queryset = paginator.page(paginator.num_pages).object_list
+
     serializer_class = ArticleSerializer
     permission_classes = [
         # PostAuthorCanEditPermission
@@ -66,3 +85,10 @@ class ArticleDetail(ArticlePost, generics.RetrieveUpdateDestroyAPIView):
 # 		return HttpResponse('I am called from a get Request')
 # 	def post(self, request):
 # 		return HttpResponse('I am called from a post Request')
+
+def logout_page(request):
+    logger.debug('AAAAAAAAAAAAAAAFDSFDSFAFDSFDSFASFDSFDSF')
+    logger.debug('AAAAAAAAAAAAAAAFDSFDSFAFDSFDSFASFDSFDSF')
+    logger.debug('AAAAAAAAAAAAAAAFDSFDSFAFDSFDSFASFDSFDSF')
+    logout(request)
+    return HttpResponseRedirect('/blogpost/')
