@@ -6,16 +6,19 @@
   <!-- Article title -->
   <div class="form-group">
     <label for="articleTitle">Title</label>
-    <input type="text" class="form-control" id="articleTitle" placeholder="Article title" value="{{currentArticle1.title}}">
+    <!-- <input type="text" class="form-control" id="articleTitle"  placeholder="Article title" value="{{currentArticle1.title}}"> -->
+    <input type="text" class="form-control" id="articleTitle"  placeholder="Article title" ng-model="currentArticleEdit.title"/>
   </div>
   <!-- Article content -->
   <div class="form-group">
     <label for="articleContent">Content</label>
-    <textarea class="form-control" rows="3" id="articleContent" placeholder="Input content" ></textarea>
+    <!-- <textarea class="form-control" rows="3" id="articleContent" placeholder="Input content" >{{currentArticle1.content}}</textarea> -->
+    <textarea class="form-control" rows="3" id="articleContent" placeholder="Input content"  ng-model="currentArticleEdit.content" ></textarea>
   </div>
 
   <div class="form-group">
-  <button  class="btn btn-default">Submit</button>
+  <button  class="btn btn-default" ng-click="submitEdit(currentArticleEdit)" >Submit</button>
+
   </div>
 </div>
 <!-- END Edit Article -->

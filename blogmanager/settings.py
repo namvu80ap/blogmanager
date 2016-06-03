@@ -129,27 +129,30 @@ STATIC_URL = '/static/'
 # LOGIN_URL = '/blogpost/accounts/login/'
 LOGIN_URL = 'django.contrib.auth.views.login'
 LOGIN_REDIRECT_URL = '/blogpost/'
-LOGGING_CONFIG = None
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'simple': {
-            'format': '%(levelname)s %(message)s'
+            'format': '%(asctime)s %(levelname)s %(name)s %(message)s'
         },
     },
     'handlers': {
-        'console':{
+        'default': {
             'level':'DEBUG',
-            'class':'logging.StreamHandler',
-            'formatter': 'simple'
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR + '/logs/blogpost.log',
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'simple',
         },
     },
     'loggers': {
-        'django.request':{
-            'handlers': ['console'],
-            'propagate': False,
+        'blogpost': {
+            'handlers': ['default'],
             'level': 'DEBUG',
+            'propagate': True,
         },
-    },
+    }
 }

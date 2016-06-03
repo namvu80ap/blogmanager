@@ -9,4 +9,6 @@ Install lib :
 sudo pip install djangorestframework
 
 sudo pip install django-bootstrap3
+
+sudo pip install django-filter
  

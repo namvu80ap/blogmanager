@@ -42,7 +42,17 @@ app.factory('dataService', function() {
 app.controller('EditBlogController', [
   '$scope', '$http' , '$location' ,'$log', 'dataService' , function($scope, $http, $location, $log , dataService) {
 	$log.debug(dataService.currentArticle);
-	$scope.currentArticle1 = dataService.currentArticle;
+	$scope.currentArticleEdit = dataService.currentArticle;
+
+	$scope.submitEdit = function (article) {
+        $log.debug( article );
+        
+
+        $http.post('/blogpost/articles/'+article.id+'/?' + article ).success( function( result , status, headers, config){
+    		$log.debug(result);
+    	});
+    }
+
  }]);
 
 app.controller('BlogPostController', [
@@ -69,9 +79,9 @@ app.controller('BlogPostController', [
     //   });
     // });
 
-    $http.get('/blogpost/articles').success( function( result , status, headers, config){
+    $http.get('/blogpost/articles/').success( function( result , status, headers, config){
     	angular.forEach(result, function(item) {
-	        $log.debug(item);
+	        // $log.debug(item);
 	        $scope.posts.push(item);
       	});
     });
