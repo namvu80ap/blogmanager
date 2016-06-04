@@ -18,3 +18,16 @@
 2016-06-04 07:24:13,877 DEBUG blogpost True
 2016-06-04 07:24:17,186 DEBUG blogpost nam.vu
 2016-06-04 07:24:17,186 DEBUG blogpost True
+2016-06-04 12:58:43,840 DEBUG blogpost <WSGIRequest: POST '/blogpost/photoUpload/'>
+2016-06-04 12:58:43,858 DEBUG blogpost success
+2016-06-04 13:01:01,821 DEBUG blogpost <WSGIRequest: POST '/blogpost/photoUpload/'>
+2016-06-04 13:01:01,826 DEBUG blogpost success
+2016-06-04 13:03:55,424 DEBUG blogpost IMG_4156.JPG
+2016-06-04 13:03:55,425 DEBUG blogpost success
+2016-06-04 13:19:17,975 DEBUG blogpost <MultiValueDict: {u'file': [<InMemoryUploadedFile: IMG_4158.JPG (image/jpeg)>]}>
+2016-06-04 13:19:17,975 DEBUG blogpost success
+2016-06-04 13:20:00,384 DEBUG blogpost <MultiValueDict: {u'file': [<InMemoryUploadedFile: IMG_4156.JPG (image/jpeg)>]}>
+2016-06-04 13:20:00,384 DEBUG blogpost success
+2016-06-04 14:11:45,286 DEBUG blogpost resultlllllll
+2016-06-04 14:11:45,287 DEBUG blogpost 28
+2016-06-04 14:19:23,103 DEBUG blogpost /home/aimi/Projects/blogmanager

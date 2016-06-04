@@ -12,9 +12,10 @@ class Article(models.Model):
 	content = models.TextField(max_length=2500)
 
 class Tag(models.Model):
-	articles = models.ManyToManyField("Article")
+	article = models.ManyToManyField("Article")
 	name = models.CharField(max_length=200, default='')
 
 class Photo(models.Model):
-    articles = models.ForeignKey('Article', related_name='photos')
-    image = models.ImageField(upload_to="%Y/%m/%d")
+    article = models.ForeignKey('Article', related_name='photos')
+    photo_name = models.CharField(max_length=250, default='')
+    imageUrl = models.TextField(max_length=500)

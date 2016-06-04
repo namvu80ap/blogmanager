@@ -22,6 +22,10 @@ app.config(['$routeProvider', '$httpProvider',
             templateUrl: 'edit_article.html',
             controller: 'EditBlogController'
         }).
+        when('/add', {
+            templateUrl: 'add_article.html',
+            controller: 'AddBlogController'
+        }).
         when('/', {
             templateUrl: 'list_article.html',
             controller: 'BlogPostController'
@@ -45,7 +49,7 @@ return $resource('/blogpost/articles/:id/', {},
     });
 }]);
 app.factory('ArticleFactory', ['$resource', function($resource) {
-return $resource('/blogpost/articles/', {},
+return $resource('/blogpost/articles/?', {},
     {
         'query': { method:'GET'},
         'create': { method:'POST'},
@@ -64,11 +68,15 @@ app.factory('dataService', function() {
 app.controller('EditBlogController', [
   '$scope', 'ArticleServices' , 'ArticleFactory', '$location', '$http' ,'$log', 'dataService',
     function($scope, ArticleServices, ArticleFactory, $location, $http , $log , dataService) {
-	$log.debug(dataService.currentArticle);
+	// $log.debug(dataService.currentArticle);
 	$scope.currentArticleEdit = dataService.currentArticle;
 
+  //Edit Article
 	$scope.submitEdit = function (article) {
       var getArticle = ArticleServices.show({ id: article.id })
+
+      $log.debug(getArticle);
+
       getArticle.title = article.title;
       getArticle.content = article.content;
       // getArticle.category = 1;
@@ -76,24 +84,44 @@ app.controller('EditBlogController', [
       // getArticle.$save();
       ArticleServices.update( { id: article.id+'/' }, article);
       // $log.debug(list);
-    }
+  }
 
  }]);
 
+app.controller('AddBlogController', [
+  '$scope', 'ArticleServices' , 'ArticleFactory', '$location', '$http' ,'$log', 'dataService', 'fileUpload',
+    function($scope, ArticleServices, ArticleFactory, $location, $http , $log , dataService, fileUpload) {
+  
+  $scope.newArticle = dataService.currentArticle;
+  //Add new article
+  $scope.createArticle = function (article) {
+      // $log.debug(article);
+      article.category = 1;
+      // getArticle.$save();
 
-// app.controller('EditBlogController', [
-//   '$scope', 'ArticleServices', '$location', '$http' ,'$log', 'dataService',
-//     function($scope, ArticleServices, $location, $http , $log , dataService) {
-//   $log.debug(dataService.currentArticle);
-//   $scope.currentArticleEdit = dataService.currentArticle;
+      var newArticle =  ArticleFactory.create(article);
+      newArticle.$promise.then(function(results) {
+        if( results['id'] > 0  
+            &&  $scope.photoFile.name 
+            && $scope.photoFile.size > 0 ){
+            $scope.uploadFile( results['id'], $scope.photoFile );
+        }
+        
+      });
+      
+      $scope.newArticle = {};
+      article={};
+  }
 
-//   $scope.submitEdit = function (article) {
-//       var getArticle = ArticleServices.show({ id: article.id })
+  $scope.uploadFile = function( articleId , file ){
+     // $log.debug('file is ' );
+     // $log.debug(file);
+     var uploadUrl = "/blogpost/photoUpload/";
+     fileUpload.uploadFileToUrl(file, uploadUrl, articleId);
+  };
 
-//       $log.debug(getArticle);
-//     }
+ }]);
 
-//  }]);
 
 app.controller('BlogPostController', [
   '$scope', '$http' , '$location' ,'$log', 'dataService', function($scope, $http, $location, $log , dataService) {
@@ -126,4 +154,41 @@ app.controller('BlogPostController', [
       	});
     });
 
+}]);
+
+app.directive('fileModel', ['$parse', function ($parse) {
+  return {
+     restrict: 'A',
+     link: function(scope, element, attrs) {
+        var model = $parse(attrs.fileModel);
+        var modelSetter = model.assign;
+        
+        element.bind('change', function(){
+           scope.$apply(function(){
+              modelSetter(scope, element[0].files[0]);
+           });
+        });
+     }
+  };
+}]);
+
+app.service('fileUpload', ['$http', function ($http) {
+  this.uploadFileToUrl = function(file, uploadUrl, articleId){
+     var fd = new FormData();
+     fd.append('file', file);
+     fd.append('articleId', articleId);
+  
+     $http.post(uploadUrl, fd, {
+        transformRequest: angular.identity,
+        headers: {'Content-Type': undefined}
+     })
+  
+     .success(function(result , status, headers, config){
+        console.log(result);
+     })
+  
+     .error(function(){
+
+     });
+  }
 }]);
