@@ -19,3 +19,10 @@ class PostAuthorCanEditPermission(SafeMethodsOnlyPermission):
         else:
             can_edit = request.user == obj.author
         return can_edit or super(PostAuthorCanEditPermission, self).has_object_permission(request, view, obj)
+
+class IsAuthorOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.user == request.user

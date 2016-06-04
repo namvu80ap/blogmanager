@@ -1,7 +1,20 @@
-2016-06-03 06:40:36,557 DEBUG blogpost AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa
-2016-06-03 06:40:36,558 DEBUG blogpost <type 'object'>
-2016-06-03 06:40:44,999 DEBUG blogpost AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa
-2016-06-03 06:40:45,000 DEBUG blogpost <type 'object'>
-2016-06-03 06:40:47,541 DEBUG blogpost AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa
-2016-06-03 06:40:47,542 DEBUG blogpost <type 'object'>
-2016-06-03 06:42:15,760 DEBUG blogpost <type 'object'>
+2016-06-04 06:51:20,866 DEBUG blogpost <django.contrib.sessions.backends.db.SessionStore object at 0x7f63ddd21d90>
+2016-06-04 06:51:20,867 DEBUG blogpost False
+2016-06-04 06:51:44,299 DEBUG blogpost AnonymousUser
+2016-06-04 06:51:44,299 DEBUG blogpost False
+2016-06-04 07:02:07,357 DEBUG blogpost AnonymousUser
+2016-06-04 07:02:07,357 DEBUG blogpost False
+2016-06-04 07:11:26,097 DEBUG blogpost AnonymousUser
+2016-06-04 07:11:26,098 DEBUG blogpost False
+2016-06-04 07:17:42,464 DEBUG blogpost AnonymousUser
+2016-06-04 07:17:42,464 DEBUG blogpost False
+2016-06-04 07:17:52,244 DEBUG blogpost AnonymousUser
+2016-06-04 07:17:52,245 DEBUG blogpost False
+2016-06-04 07:22:30,006 DEBUG blogpost nam.vu
+2016-06-04 07:22:30,006 DEBUG blogpost True
+2016-06-04 07:22:50,076 DEBUG blogpost nam.vu
+2016-06-04 07:22:50,076 DEBUG blogpost True
+2016-06-04 07:24:13,876 DEBUG blogpost nam.vu
+2016-06-04 07:24:13,877 DEBUG blogpost True
+2016-06-04 07:24:17,186 DEBUG blogpost nam.vu
+2016-06-04 07:24:17,186 DEBUG blogpost True

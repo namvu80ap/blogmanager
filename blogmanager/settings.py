@@ -156,3 +156,11 @@ LOGGING = {
         },
     }
 }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+    )
+}
+
+CSRF_COOKIE_NAME = 'csrftoken'
+# APPEND_SLASH=False

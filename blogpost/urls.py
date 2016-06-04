@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from blogpost.views import Index, ArticlePost, EditArticleView, ListArticleView
+from blogpost.views import Index, ArticlePost, ArticleDetail, EditArticleView, ListArticleView
 from django.contrib.auth.decorators import login_required
 
 from rest_framework.routers import DefaultRouter
@@ -12,8 +12,8 @@ from rest_framework.routers import DefaultRouter
 # ]
 
 # API rounter
-router = DefaultRouter()
-router.register(r'', ArticlePost)
+# router = DefaultRouter()
+# router.register(r'articles', ArticlePost)
 # router.register(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 
 urlpatterns = [
@@ -22,6 +22,8 @@ urlpatterns = [
 	url(r'^$', login_required(Index.as_view()) ),
 	url(r'^edit_article.html$',  login_required(EditArticleView.as_view())),
 	url(r'^list_article.html$', login_required(ListArticleView.as_view())),
-    url(r'^articles', include(router.urls)),
+    # url(r'^', include(router.urls)),
+    url(r'^articles/$', ArticlePost.as_view()),
+    url(r'^articles/(?P<pk>[0-9]+)/$', ArticleDetail.as_view()),
     # url(r'^articles', include(article_urls)),
 ]

@@ -12,10 +12,11 @@
 //   }
 // ]);
 
-var app = angular.module('blogmanager.blogpost', ['ngRoute']);
+var app = angular.module('blogmanager.blogpost', ['ngRoute','ngResource'] );
 
-app.config(['$routeProvider',
-    function($routeProvider) {
+// Switch UI
+app.config(['$routeProvider', '$httpProvider',
+    function($routeProvider, $httpProvider) {
         $routeProvider.
         when('/edit', {
             templateUrl: 'edit_article.html',
@@ -28,8 +29,29 @@ app.config(['$routeProvider',
         otherwise({
             redirectTo: '/'
         });
+
+        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     }
 ]);
+
+//API REST Services
+app.factory('ArticleServices', ['$resource', function($resource) {
+return $resource('/blogpost/articles/:id/', {},
+    {
+        'show': { method:'GET' },
+        'update': { method:'PUT' , param: {id: '@id'} },
+        'delete': { method:'DELETE', param: {id: '@id'} }
+    });
+}]);
+app.factory('ArticleFactory', ['$resource', function($resource) {
+return $resource('/blogpost/articles/', {},
+    {
+        'query': { method:'GET'},
+        'create': { method:'POST'},
+    });
+}]);
+
 
 app.factory('dataService', function() {
   var _currentArticle = {};
@@ -40,20 +62,38 @@ app.factory('dataService', function() {
 })
 
 app.controller('EditBlogController', [
-  '$scope', '$http' , '$location' ,'$log', 'dataService' , function($scope, $http, $location, $log , dataService) {
+  '$scope', 'ArticleServices' , 'ArticleFactory', '$location', '$http' ,'$log', 'dataService',
+    function($scope, ArticleServices, ArticleFactory, $location, $http , $log , dataService) {
 	$log.debug(dataService.currentArticle);
 	$scope.currentArticleEdit = dataService.currentArticle;
 
 	$scope.submitEdit = function (article) {
-        $log.debug( article );
-        
-
-        $http.post('/blogpost/articles/'+article.id+'/?' + article ).success( function( result , status, headers, config){
-    		$log.debug(result);
-    	});
+      var getArticle = ArticleServices.show({ id: article.id })
+      getArticle.title = article.title;
+      getArticle.content = article.content;
+      // getArticle.category = 1;
+      $log.debug(getArticle);
+      // getArticle.$save();
+      ArticleServices.update( { id: article.id+'/' }, article);
+      // $log.debug(list);
     }
 
  }]);
+
+
+// app.controller('EditBlogController', [
+//   '$scope', 'ArticleServices', '$location', '$http' ,'$log', 'dataService',
+//     function($scope, ArticleServices, $location, $http , $log , dataService) {
+//   $log.debug(dataService.currentArticle);
+//   $scope.currentArticleEdit = dataService.currentArticle;
+
+//   $scope.submitEdit = function (article) {
+//       var getArticle = ArticleServices.show({ id: article.id })
+
+//       $log.debug(getArticle);
+//     }
+
+//  }]);
 
 app.controller('BlogPostController', [
   '$scope', '$http' , '$location' ,'$log', 'dataService', function($scope, $http, $location, $log , dataService) {
