@@ -12,7 +12,7 @@ class Article(models.Model):
 	content = models.TextField(max_length=2500)
 
 class Tag(models.Model):
-	article = models.ManyToManyField("Article")
+	article = models.ManyToManyField("Article", related_name='tags')
 	name = models.CharField(max_length=200, default='')
 
 class Photo(models.Model):

@@ -16,6 +16,12 @@
     <!-- <textarea class="form-control" rows="3" id="articleContent" placeholder="Input content" >{{currentArticle1.content}}</textarea> -->
     <textarea class="form-control" rows="3" id="articleContent" placeholder="Input content"  ng-model="currentArticleEdit.content" ></textarea>
   </div>
+
+  <div class="form-group">
+    <label for="tags">Article Tags</label>
+    <tags-input ng-model="tags" on-tag-added="addTags()" on-tag-removed="removeTags()"></tags-input>
+  </div>
+  
   <div class="form-group">
   <img src="/media/{{currentArticleEdit.id}}_{{photo}}" class=".img-thumbnail" alt="Cinque Terre" ng-repeat="photo in currentArticleEdit.photos" style="width:150px;height:150px">
   </div>

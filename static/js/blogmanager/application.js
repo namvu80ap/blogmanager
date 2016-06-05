@@ -12,7 +12,7 @@
 //   }
 // ]);
 
-var app = angular.module('blogmanager.blogpost', ['ngRoute','ngResource'] );
+var app = angular.module('blogmanager.blogpost', ['ngRoute','ngResource','ngTagsInput'] );
 
 // Switch UI
 app.config(['$routeProvider', '$httpProvider',
@@ -55,6 +55,13 @@ return $resource('/blogpost/articles/?', {},
         'create': { method:'POST'},
     });
 }]);
+app.factory('TagFactory', ['$resource', function($resource) {
+return $resource('/blogpost/tag/?', {},
+    {
+        'query': { method:'GET'},
+        'create': { method:'POST'},
+    });
+}]);
 
 
 app.factory('dataService', function() {
@@ -66,51 +73,89 @@ app.factory('dataService', function() {
 })
 
 app.controller('EditBlogController', [
-  '$scope', 'ArticleServices' , 'ArticleFactory', '$location', '$http' ,'$log', 'dataService',
-    function($scope, ArticleServices, ArticleFactory, $location, $http , $log , dataService) {
+  '$scope', 'ArticleServices' , 'ArticleFactory', 'TagFactory','$location', '$http' ,'$log', '$q', 'dataService',
+    function($scope, ArticleServices, ArticleFactory, TagFactory,  $location, $http , $log , $q, dataService) {
 	// $log.debug(dataService.currentArticle);
 	$scope.currentArticleEdit = dataService.currentArticle;
+  $scope.tags = [];
+  angular.forEach($scope.currentArticleEdit.tags, function( value, idx ){
+      $scope.tags.push({ text : value });
+  });
 
   //Edit Article
 	$scope.submitEdit = function (article) {
       var getArticle = ArticleServices.show({ id: article.id })
 
-      $log.debug(getArticle);
+      $log.debug(getArticle.photos);
 
       getArticle.title = article.title;
       getArticle.content = article.content;
       // getArticle.category = 1;
       $log.debug(getArticle);
       // getArticle.$save();
-      ArticleServices.update( { id: article.id+'/' }, article);
-      // $log.debug(list);
-  }
+      // ArticleServices.update( { id: article.id+'/' }, article);
+      
+      //TODO - Bad pratice- Update tag item then delete and add
+      //Delete tags
+      var fd = new FormData();
+      fd.append('articleId', article.id);
+
+      $http.post('/blogpost/deleteArticleTag/', fd, {
+        transformRequest: angular.identity,
+        headers: {'Content-Type': undefined}
+      }).success(function(result , status, headers, config){
+          console.log(result);
+          //ADD TAGS To article
+          // var promiseArr = [];
+          angular.forEach( $scope.tags, function( value, key ){
+            var newTag = { "article" : [article.id] , "name" : value.text };
+            var addTag = TagFactory.create(newTag);
+          });
+          
+          // $q.all(promiseArr).then(function(){
+            $location.path('/');  
+          // });
+      }).error(function(){
+          console.log('ERROR');
+      });
+  } //END EDIT Article
 
  }]);
 
 app.controller('AddBlogController', [
-  '$scope', 'ArticleServices' , 'ArticleFactory', '$location', '$http' ,'$log', 'dataService', 'fileUpload',
-    function($scope, ArticleServices, ArticleFactory, $location, $http , $log , dataService, fileUpload) {
+  '$scope', 'ArticleServices' , 'ArticleFactory' , 'TagFactory', '$location', '$http' ,'$log', 'dataService', 'fileUpload',
+    function($scope, ArticleServices, ArticleFactory, TagFactory, $location, $http , $log , dataService, fileUpload) {
   
-  $scope.newArticle = dataService.currentArticle;
+  $scope.newArticle = {};
+
+  $scope.tags = [];
+  
   //Add new article
   $scope.createArticle = function (article) {
       // $log.debug(article);
       article.category = 1;
       // getArticle.$save();
-
       var newArticle =  ArticleFactory.create(article);
       newArticle.$promise.then(function(results) {
-        if( results['id'] > 0  
-            &&  $scope.photoFile.name 
-            && $scope.photoFile.size > 0 ){
-            $scope.uploadFile( results['id'], $scope.photoFile );
+        if( results && results['id'] > 0 ){
+            //Add tags
+            angular.forEach( $scope.tags, function( value, key ){
+              var newTag = { "article" : [results['id']] , "name" : value.text };
+              TagFactory.create(newTag);
+            });
+            if( $scope.photoFile  
+                &&  $scope.photoFile.name 
+                && $scope.photoFile.size > 0 ){
+                //Add photo
+                $scope.uploadFile( results['id'], $scope.photoFile );
+            }
         }
-        
       });
-      
+
       $scope.newArticle = {};
       article={};
+
+      $location.path('/');
   }
 
   $scope.uploadFile = function( articleId , file ){
@@ -120,13 +165,26 @@ app.controller('AddBlogController', [
      fileUpload.uploadFileToUrl(file, uploadUrl, articleId);
   };
 
+  $scope.addArticleTags = function( articleId , tags ){
+     var uploadUrl = "/blogpost/addTags/";
+     fileUpload.uploadFileToUrl(file, uploadUrl, articleId);
+  };
+
+  $scope.addTags = function () {
+    $log.debug( $scope.tags );
+  }
+
+  $scope.removeTags = function () {
+    $log.debug( $scope.tags );
+  }
+
  }]);
 
 
 app.controller('BlogPostController', [
   '$scope', '$http' , '$location' ,'$log', 'dataService', function($scope, $http, $location, $log , dataService) {
 
-  	$scope.currentArticle2 = dataService.currentArticle;
+  	$scope.currentArticle = dataService.currentArticle;
 
   	$scope.isActive = function (viewLocation) {
         return ( viewLocation === $location.path() );

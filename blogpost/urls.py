@@ -14,6 +14,7 @@ from rest_framework.routers import DefaultRouter
 # API rounter
 router = DefaultRouter()
 router.register(r'photo', PhotoPost)
+router.register(r'tag', TagPost)
 # router.register(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
     url(r'^articles/(?P<pk>[0-9]+)/$', ArticleDetail.as_view()),
     # url(r'^articles', include(article_urls)),
     url(r'^photoUpload/$', photouUpload , name='photouUpload'),
+    url(r'^deleteArticleTag/$', deleteArticleTag , name='deleteArticleTag'),
     # Simple router
     url(r'^', include(router.urls)),
 ]

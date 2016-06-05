@@ -1,8 +1,8 @@
 from django.shortcuts import render, render_to_response
 from django.views.generic import View
 from rest_framework import generics, authentication, permissions, viewsets, filters
-from blogpost.models import Article, Photo
-from blogpost.dataserializer import ArticleSerializer, PhotoSerializer
+from blogpost.models import Article, Photo, Tag
+from blogpost.dataserializer import ArticleSerializer, PhotoSerializer, TagSerializer
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import logout
@@ -111,6 +111,11 @@ class PhotoPost(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
 
+class TagPost(viewsets.ModelViewSet):
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly,)
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
 # class ArticlePost(object):
 #     model = Article
 #     queryset = Article.objects.all()
@@ -142,6 +147,13 @@ def photouUpload(request):
     photo.save() 
     return HttpResponse("File upload success")
 
+def deleteArticleTag(request):
+    articleId = request.POST['articleId']
+    
+    article = Article.objects.get(id = articleId)
+    article.tags.all().delete()
+
+    return HttpResponse("success")
 # class FileUploadView(APIView):
 #     parser_classes = (FileUploadParser, )
 

@@ -9,13 +9,17 @@
         <th>Titile</th>
         <th>Content</th>
         <th>Category</th>
+        <th>Photo</th>
+        <th>Tags</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="post in posts" ng-click="goEditArticle(post)">
-        <td>{{post.title}}</td>
+        <td><a ng-click="goEditArticle(post)">{{post.title}}</a></td>
         <td>{{post.content}}</td>
         <td>{{post.category}}</td>
+        <td><img src="/media/{{post.id}}_{{photo}}" class=".img-thumbnail" alt="Cinque Terre" ng-repeat="photo in post.photos" style="width:40px;height:40px"></td>
+        <td><span class="badge" ng-repeat="tag in post.tags">{{tag}}</span></td>
       </tr>
     </tbody>
   </table>
